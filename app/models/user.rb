@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_secure_password
+
   has_many :user_exams
   has_many :tutors, through: :user_exams
   

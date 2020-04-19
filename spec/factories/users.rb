@@ -15,5 +15,6 @@ FactoryBot.define do
     esta_en_escalada { true }
     esta_en_entrenamiento { true }
     email { Faker::Internet.email }
+    password { "123456" }
   end
 end
