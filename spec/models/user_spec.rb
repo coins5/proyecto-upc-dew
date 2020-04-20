@@ -17,4 +17,5 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:esta_en_escalada) }
   it { should validate_presence_of(:esta_en_entrenamiento) }
   it { should validate_presence_of(:email) }
+  it { should validate_presence_of(:password_digest) }
 end
