@@ -9,10 +9,13 @@ RSpec.describe 'User Exams API', type: :request do
   let(:exam_id) { exam.id }
   let(:id) { user_exams.first.id }
 
+  let(:headers) { valid_headers }
+
   # Test suite for GET /users/:user_id/user_exams
   describe 'GET /users/:user_id/user_exams' do
     # make HTTP get request before each example
-    before { get "/users/#{user_id}/user_exams" }
+    #before { get "/users/#{user_id}/user_exams" }
+    before { get "/users/#{user_id}/user_exams", params: {}, headers: headers }
 
     context 'when user exists' do
       it 'returns status code 200' do
@@ -39,7 +42,8 @@ RSpec.describe 'User Exams API', type: :request do
 
   # Test suite for GET /users/:user_id/user_exams/:id
   describe 'GET /users/:user_id/user_exams/:id' do
-    before { get "/users/#{user_id}/user_exams/#{id}" }
+    # before { get "/users/#{user_id}/user_exams/#{id}" }
+    before { get "/users/#{user_id}/user_exams/#{id}", params: {}, headers: headers }
 
     context 'when user_exam exists' do
       it 'returns status code 200' do
@@ -65,17 +69,18 @@ RSpec.describe 'User Exams API', type: :request do
     end
   end
 
-   # Test suite for PUT /users/:user_id/user_exams
-   describe 'POST /users/:user_id/user_exams' do
+  # Test suite for PUT /users/:user_id/user_exams
+  describe 'POST /users/:user_id/user_exams' do
     let(:valid_attributes) { {
       fecha: '2020-04-28',
       puntaje: 25,
       user_id: 1,
       exam_id: exam_id
-    } }
+    }.to_json }
 
     context 'when request attributes are valid' do
-      before { post "/users/#{user_id}/user_exams", params: valid_attributes }
+      # before { post "/users/#{user_id}/user_exams", params: valid_attributes }
+      before { post "/users/#{user_id}/user_exams", params: valid_attributes, headers: headers }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -83,7 +88,8 @@ RSpec.describe 'User Exams API', type: :request do
     end
 
     context 'when an invalid request' do
-      before { post "/users/#{user_id}/user_exams", params: {} }
+      # before { post "/users/#{user_id}/user_exams", params: {} }
+      before { post "/users/#{user_id}/user_exams", params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -103,9 +109,9 @@ RSpec.describe 'User Exams API', type: :request do
       puntaje: 35,
       user_id: 1,
       exam_id: exam_id
-    } }
+    }.to_json }
 
-    before { put "/users/#{user_id}/user_exams/#{id}", params: valid_attributes }
+    before { put "/users/#{user_id}/user_exams/#{id}", params: valid_attributes, headers: headers }
 
     context 'when user_exam exists' do
       it 'returns status code 204' do
@@ -158,7 +164,7 @@ RSpec.describe 'User Exams API', type: :request do
 
   # Test suite for DELETE /users/:user_id/user_exams/:id
   describe 'DELETE /users/:user_id/user_exams/:id' do
-    before { delete "/users/#{user_id}/user_exams/#{id}" }
+    before { delete "/users/#{user_id}/user_exams/#{id}", headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

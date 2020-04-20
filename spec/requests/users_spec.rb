@@ -77,12 +77,7 @@ RSpec.describe 'users API', type: :request do
         esta_en_escalada: true,
         esta_en_entrenamiento: true,
         email: 'email@correo.com',
-        password: '654321',
-        password_digest: '654321',
-        password_confirmation: '654321',
-        Password: '654321' #,
-        #password_digest: '654321',
-        #password_confirmation: '654321'
+        password: '654321'
       }.to_json
     end
 
@@ -119,7 +114,6 @@ RSpec.describe 'users API', type: :request do
       before { post '/users', params: invalid_attributes, headers: headers }
 
       it 'returns status code 422' do
-        puts json
         expect(response).to have_http_status(422)
       end
 
