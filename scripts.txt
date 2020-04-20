@@ -1,0 +1,34 @@
+
+
+# tipo_usuario: admin/instructor/normal
+rails g model User tipo_usuario:string nombres:string apellidos:string direccion:string distrito:string tipo_documento:string numero_documento:string fecha_nacimiento:date fecha_inicio:date talla:integer peso:decimal sexo:string esta_en_escalada:boolean esta_en_entrenamiento:boolean email:string password_digest:string
+
+# tipo_examen: biologico/fisiologico
+rails g model Exam tipo_examen:string name:string description:string minimo:integer promedio:integer maximo:integer
+
+rails g model User_Exam fecha:date puntaje:integer user:references exam:references
+
+rails g model Sede nombre:string distrito:string
+
+# Escribir los test: ./spec/models
+
+# Generando controladores
+rails g controller Users
+rails g controller Exams
+rails g controller User_Exams
+rails g controller Sedes
+
+
+# Despues de crear toda la funcionalidad y las dependencias de JWT
+rails g controller Authentication
+
+
+# Pruebas (windows):
+set REPORT_PATH=reports/asd && bundle exec rspec --format RspecHtmlReporter spec
+
+# Pruebas rspec:
+# todas las Pruebas
+rspec
+
+# uno por uno
+bundle exec rspec .\spec\requests\users_spec.rb -fd
