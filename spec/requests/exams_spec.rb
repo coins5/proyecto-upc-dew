@@ -2,13 +2,17 @@ require 'rails_helper'
 
 RSpec.describe 'Exams API', type: :request do
   # initialize test data 
+  let(:user) { create(:user) }
   let!(:exams) { create_list(:exam, 10) }
   let(:exam_id) { exams.first.id }
+
+  let(:headers) { valid_headers }
 
   # Test suite for GET /exams
   describe 'GET /exams' do
     # make HTTP get request before each example
-    before { get '/exams' }
+    #before { get '/exams' }
+    before { get '/exams', params: {}, headers: headers }
 
     it 'returns exams' do
       # Note `json` is a custom helper to parse JSON responses
@@ -23,7 +27,8 @@ RSpec.describe 'Exams API', type: :request do
 
   # Test suite for GET /exams/:id
   describe 'GET /exams/:id' do
-    before { get "/exams/#{exam_id}" }
+    #before { get "/exams/#{exam_id}" }
+    before { get "/exams/#{exam_id}", params: {}, headers: headers }
 
     context 'when the record exists' do
       it 'returns the exam' do
@@ -52,10 +57,14 @@ RSpec.describe 'Exams API', type: :request do
   # Test suite for POST /exams
   describe 'POST /exams' do
     # valid payload
-    let(:valid_attributes) { { tipo_examen: 'fisiologico', name: 'planchas', description: 'se hacen planchas a lo yolo', minimo: 10, promedio: 30, maximo: 50 } }
-
+    # let(:valid_attributes) { { tipo_examen: 'fisiologico', name: 'planchas', description: 'se hacen planchas a lo yolo', minimo: 10, promedio: 30, maximo: 50 } }
+    let(:valid_attributes) do
+      # send json payload
+      { tipo_examen: 'fisiologico', name: 'planchas', description: 'se hacen planchas a lo yolo', minimo: 10, promedio: 30, maximo: 50 }.to_json
+    end
     context 'when the request is valid' do
-      before { post '/exams', params: valid_attributes }
+      # before { post '/exams', params: valid_attributes }
+      before { post '/exams', params: valid_attributes, headers: headers }
 
       it 'creates a exam' do
         expect(json['tipo_examen']).to eq('fisiologico')
@@ -72,7 +81,10 @@ RSpec.describe 'Exams API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/exams', params: { tipo_examen: 'cualquier cosa' } }
+      # before { post '/exams', params: { tipo_examen: 'cualquier cosa' } }
+      let(:invalid_attributes) { { tipo_examen: 'cualquier cosa' }.to_json }
+      before { post '/exams', params: invalid_attributes, headers: headers }
+      
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -87,10 +99,11 @@ RSpec.describe 'Exams API', type: :request do
 
   # Test suite for PUT /exams/:id
   describe 'PUT /exams/:id' do
-    let(:valid_attributes) { { nombre: 'una tienda adicional', distrito: 'san miguel' } }
+    # let(:valid_attributes) { { nombre: 'una tienda adicional', distrito: 'san miguel' } }
+    let(:valid_attributes) { { nombre: 'una tienda adicional', distrito: 'san miguel' }.to_json }
 
     context 'when the record exists' do
-      before { put "/exams/#{exam_id}", params: valid_attributes }
+      before { put "/exams/#{exam_id}", params: valid_attributes, headers: headers }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -104,7 +117,8 @@ RSpec.describe 'Exams API', type: :request do
 
   # Test suite for DELETE /exams/:id
   describe 'DELETE /exams/:id' do
-    before { delete "/exams/#{exam_id}" }
+    # before { delete "/exams/#{exam_id}" }
+    before { delete "/exams/#{exam_id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
